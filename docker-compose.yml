@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: ../backend
+    hostname: dev.backend
+    env_file:
+      - ./env-files/backend.env
+    volumes:
+      - ../backend:/app
+    ports:
+      - "80:3000"
+      - "9229:9229"
+
+  database:
+    image: mysql:8.3.0
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - db-volume:/var/lib/mysql
+      - ./database/scripts/:/docker-entrypoint-initdb.d/
+    ports:
+      - "3306:3306"
+
+volumes:
+  db-volume:
